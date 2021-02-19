@@ -25,16 +25,59 @@
 }
 .calendar-wrapper .calendar {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 5px);
   width: 100%;
 }
-
+.calendar-wrapper .calendar .calendar-header {
+  background: #00dbb1;
+  color: #e4fbf6;
+  font-size: 1.6em;
+  text-align: center;
+  padding: 20px 30px;
+  display: block;
+}
+.calendar-wrapper .calendar .calendar-header .calendar-btn {
+  color: #e4fbf6;
+}
+.calendar-wrapper .calendar .calendar-header .calendar-btn-chevron {
+  font-size: 25px;
+  color: #464e4d;
+  font-weight: 900;
+}
+.calendar-wrapper .calendar .calendar-btn {
+  display: inline-block;
+  background: none;
+  text-decoration: none;
+  color: #464e4d;
+  border: none;
+  cursor: pointer;
+  outline: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 4px;
+  padding: 3px 7px;
+}
+.calendar-wrapper .calendar .calendar-btn:focus {
+  border-color: #00dbb1;
+  box-shadow: 0 0 0 0.25rem rgba(7, 176, 144, 0.5);
+}
 body {
   background: #ececec;
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
 }
 
 input.field, textarea.field {
   outline: none;
   padding: 5px 10px;
   background: none;
+  font-size: 1em;
+  line-height: 1.2em;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
 }

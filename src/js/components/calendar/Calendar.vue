@@ -20,9 +20,29 @@
 					class="calendar-field field" />
 			</div>
 			<div class="calendar">
-				Calendar
 				<div class="calendar-header">
-					
+					<button
+						type="button"
+						class="calendar-btn calendar-btn-chevron float-left">
+						<i class="fas fa-chevron-left"></i>
+					</button>
+					<button
+						type="button"
+						class="calendar-btn calendar-btn-chevron float-right">
+						<i class="fas fa-chevron-right"></i>
+					</button>
+					<span>
+						<a 
+							href="#"
+							class="calendar-btn">March</a> 
+						<a 
+							href="#"
+							class="calendar-btn">{{year}}</a></span>
+				</div>
+				<div class="calendar-body">
+					<days 
+						:month-index="monthIndex"
+						:year="year"/>
 				</div>
 			</div>
 		</div>
@@ -30,11 +50,19 @@
 </template>
 <script>
 	import {makeId} from './../../helpers'
+	import moment from 'moment'
+	import Days from './Days'
+
 	export default {
+		components: {Days},
 		data() {
 			return {
-				dateFrom: '',
-				dateTo: '',
+				form: {
+					dateFrom: '',
+					dateTo: '',					
+				},
+				monthIndex: moment().month(),
+				year: moment().year(),
 			}
 		},
 		computed: {

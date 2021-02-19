@@ -4,7 +4,7 @@
 
 	.calendar-fields {
 		padding: 5px 10px;
-		border: 1px solid #d5d3d4;
+		border: 1px solid $darkGray;
 		display: inline-block;
 
 		.calendar-field {
@@ -23,14 +23,61 @@
 		}
 
 		.calendar-field:focus {
-			background: #a1d9d6;			
+			background: $blue;			
 			border: none;
 		}
 	}
 
 	.calendar {
 		position: absolute;
-		top: 100%;
+		top: calc(100% + 5px);
 		width: 100%;
+
+		.calendar-header {
+			background: $green;
+			color: $lightWhite;
+			font-size: 1.6em;
+			text-align: center;
+			padding: 20px 30px;
+			display: block;
+
+			.calendar-btn {
+				color: $lightWhite;
+			}
+
+			.calendar-btn-chevron {
+				font-size: 25px;
+				color: $dark;
+				font-weight: 900;
+			}
+		}
+
+		.calendar-btn {
+			display: inline-block;
+			background: none;
+			text-decoration: none;
+			color: $dark;
+			border: none;
+			cursor: pointer;
+			outline: 0;
+			transition: 
+				color .15s ease-in-out,
+				background-color .15s ease-in-out,
+				border-color .15s ease-in-out,
+				box-shadow .15s ease-in-out;
+			border-radius: 4px;
+			padding: 3px 7px;
+			// background: none;
+			// border: none;
+			// text-transform: none;
+
+			&:focus {
+				border-color: $green;
+    			box-shadow: 0 0 0 0.25rem rgb(7 176 144 / 50%);
+			}
+		}
+
+		.calendar-btn-link {
+		}
 	}
 }
