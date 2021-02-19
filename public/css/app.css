@@ -1,1 +1,40 @@
+.calendar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.calendar-wrapper .calendar-fields {
+  padding: 5px 10px;
+  border: 1px solid #d5d3d4;
+  display: inline-block;
+}
+.calendar-wrapper .calendar-fields .calendar-field {
+  border: none;
+  border-radius: 4px;
+}
+.calendar-wrapper .calendar-fields .calendar-field,
+.calendar-wrapper .calendar-fields .calendar-field-arrow {
+  display: inline-block;
+}
+.calendar-wrapper .calendar-fields .calendar-field-arrow {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.calendar-wrapper .calendar-fields .calendar-field:focus {
+  background: #a1d9d6;
+  border: none;
+}
+.calendar-wrapper .calendar {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
 
+body {
+  background: #ececec;
+}
+
+input.field, textarea.field {
+  outline: none;
+  padding: 5px 10px;
+  background: none;
+}

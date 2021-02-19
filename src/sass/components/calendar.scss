@@ -1,0 +1,36 @@
+.calendar-wrapper {
+	position: relative;
+	display: inline-block;
+
+	.calendar-fields {
+		padding: 5px 10px;
+		border: 1px solid #d5d3d4;
+		display: inline-block;
+
+		.calendar-field {
+			border: none;
+			border-radius: 4px;
+		}
+
+		.calendar-field,
+		.calendar-field-arrow {
+			display: inline-block;
+		}
+
+		.calendar-field-arrow {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.calendar-field:focus {
+			background: #a1d9d6;			
+			border: none;
+		}
+	}
+
+	.calendar {
+		position: absolute;
+		top: 100%;
+		width: 100%;
+	}
+}

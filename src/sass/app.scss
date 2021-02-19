@@ -1,0 +1,13 @@
+@import './components/calendar';
+
+body {
+	background: #ececec;
+}
+
+input, textarea {
+	&.field {
+		outline: none;
+		padding: 5px 10px;
+		background: none;
+	}
+}

@@ -35,6 +35,7 @@
     "vue-test-utils": "^1.0.0-beta.11"
   },
   "dependencies": {
+    "moment": "^2.29.1",
     "vue": "^2.6.12"
   },
   "jest": {
