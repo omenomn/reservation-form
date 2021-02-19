@@ -19,31 +19,10 @@
 					placeholder="Check out"
 					class="calendar-field field" />
 			</div>
-			<div class="calendar">
-				<div class="calendar-header">
-					<button
-						type="button"
-						class="calendar-btn calendar-btn-chevron float-left">
-						<i class="fas fa-chevron-left"></i>
-					</button>
-					<button
-						type="button"
-						class="calendar-btn calendar-btn-chevron float-right">
-						<i class="fas fa-chevron-right"></i>
-					</button>
-					<span>
-						<a 
-							href="#"
-							class="calendar-btn">March</a> 
-						<a 
-							href="#"
-							class="calendar-btn">{{year}}</a></span>
-				</div>
-				<div class="calendar-body">
-					<days 
-						:month-index="monthIndex"
-						:year="year"/>
-				</div>
+			<days-card 
+				:key="monthCardKey"
+				v-on:month-changed="changeMonth($event)"
+				:date="date"/>
 			</div>
 		</div>
 	</div>
@@ -51,24 +30,28 @@
 <script>
 	import {makeId} from './../../helpers'
 	import moment from 'moment'
-	import Days from './Days'
+	import DaysCard from './cards/Days'
 
 	export default {
-		components: {Days},
+		components: {DaysCard},
 		data() {
 			return {
-				form: {
-					dateFrom: '',
-					dateTo: '',					
-				},
-				monthIndex: moment().month(),
-				year: moment().year(),
+				dateFrom: '',
+				dateTo: '',	
+				date: moment(),
+				monthCardKey: 0,
 			}
 		},
 		computed: {
 			id() {
 				return makeId()
 			},
+		},
+		methods: {
+			changeMonth(type) {
+				this.date.[type](1, 'month')
+				this.monthCardKey++
+			}
 		}
 	}
 </script>

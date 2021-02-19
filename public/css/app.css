@@ -44,6 +44,17 @@
   color: #464e4d;
   font-weight: 900;
 }
+.calendar-wrapper .calendar .calendar-body {
+  background: #fff;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table {
+  text-align: center;
+  width: 100%;
+  color: #a6a8b2;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th, .calendar-wrapper .calendar .calendar-body .calendar-table td {
+  padding: 5px 10px;
+}
 .calendar-wrapper .calendar .calendar-btn {
   display: inline-block;
   background: none;

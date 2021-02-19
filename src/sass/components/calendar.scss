@@ -4,7 +4,7 @@
 
 	.calendar-fields {
 		padding: 5px 10px;
-		border: 1px solid $darkGray;
+		border: 1px solid $lightGray;
 		display: inline-block;
 
 		.calendar-field {
@@ -49,6 +49,20 @@
 				font-size: 25px;
 				color: $dark;
 				font-weight: 900;
+			}
+		}
+
+		.calendar-body {
+			background: #fff;
+
+			.calendar-table {
+				text-align: center;
+				width: 100%;
+				color: $darkGray;
+
+				th, td {
+					padding: 5px 10px;
+				}
 			}
 		}
 
