@@ -1,18 +1,6 @@
 <template>
-	<div class="calendar">
-		<div class="calendar-header">
-			<button
-				@click="$emit('month-changed', 'subtract')"
-				type="button"
-				class="calendar-btn calendar-btn-chevron float-left">
-				<i class="fas fa-chevron-left"></i>
-			</button>
-			<button
-				@click="$emit('month-changed', 'add')"
-				type="button"
-				class="calendar-btn calendar-btn-chevron float-right">
-				<i class="fas fa-chevron-right"></i>
-			</button>
+	<base-card v-on:date-changed="$emit('month-changed', $event)">
+		<template v-slot:calendar-header>
 			<span>
 				<a 
 					href="#"
@@ -20,23 +8,35 @@
 				<a 
 					href="#"
 					class="calendar-btn">{{date.year()}}</a></span>
-		</div>
-		<div class="calendar-body">
+		</template>
+		<template v-slot:calendar-body>			
 			<table class="calendar-table">
 			  <tr>
 			    <th v-for="(day, index) in daysOfWeek">{{day}}</th>
 			  </tr>
 			  <tr v-for="(week, index) in calendar">
-			    <td v-for="(cday, index) in week">{{cday.format('D')}}</td>
+			    <td v-for="(cday, index) in week">
+			    	<a 
+			    		href="#"
+			    		@click.prevent=""
+			    		class="calendar-btn-day"
+			    		:class="{
+			    			'calendar-current-month': cday.month() == date.month(),
+			    		}">
+			    		{{cday.format('D')}}
+			    	</a>
+			    </td>
 			  </tr>
 			</table>
-		</div>
-	</div>
+		</template>
+	</base-card>
 </template>
 <script>
 	import moment from 'moment'
+	import BaseCard from './Base'
 
 	export default {
+		components: {BaseCard},
 		props: ['date'],
 		computed: {		
 			startDay() {
@@ -47,26 +47,18 @@
 			},
 			calendar() {
 				var calendar = [];
-				var index = this.startDay.clone();
+				let date = this.startDay.clone().subtract(1, 'day');
 
-				while (index.isBefore(this.endDay, 'day')) {
-			    calendar.push(
-		        new Array(7).fill(0).map(
-	            function(n, i) {
-	                return index.add(1, 'day').clone();
-	            }
-		        )
-			    );
+				while (date.isBefore(this.endDay, 'day')) {
+				    calendar.push(Array(7).fill(0).map(() => date.add(1, 'day').clone()))
 				}
 
 				return calendar
 			},
 			daysOfWeek() {
-				return this.calendar[0].map(
-          function(date, i) {
-            return date.format('ddd');
-          }
-        )
+				let date = this.startDay.clone().subtract(1, 'day');
+
+				return Array(7).fill(0).map(() => date.add(1, 'day').format('ddd'))
 			}
 		}
 	}

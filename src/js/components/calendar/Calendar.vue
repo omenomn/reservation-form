@@ -20,6 +20,7 @@
 					class="calendar-field field" />
 			</div>
 			<days-card 
+				v-if="mode == DAYS_MODE"
 				:key="monthCardKey"
 				v-on:month-changed="changeMonth($event)"
 				:date="date"/>
@@ -32,6 +33,10 @@
 	import moment from 'moment'
 	import DaysCard from './cards/Days'
 
+	const DAYS_MODE = 'days'
+	const MONTHS_MODE = 'months'
+	const YEARS_MODE = 'years'
+
 	export default {
 		components: {DaysCard},
 		data() {
@@ -40,12 +45,16 @@
 				dateTo: '',	
 				date: moment(),
 				monthCardKey: 0,
+				mode: DAYS_MODE,
 			}
 		},
 		computed: {
 			id() {
 				return makeId()
 			},
+			DAYS_MODE: () => DAYS_MODE,
+			MONTHS_MODE: () => MONTHS_MODE,
+			YEARS_MODE: () => YEARS_MODE,
 		},
 		methods: {
 			changeMonth(type) {

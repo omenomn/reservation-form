@@ -29,9 +29,13 @@
 	}
 
 	.calendar {
+		border: 1px solid $lightGray;
 		position: absolute;
 		top: calc(100% + 5px);
 		width: 100%;
+		-webkit-box-shadow: 0px 1px 31px -13px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 1px 31px -13px rgba(0,0,0,0.75);
+		box-shadow: 0px 1px 31px -13px rgba(0,0,0,0.75);
 
 		.calendar-header {
 			background: $green;
@@ -46,7 +50,7 @@
 			}
 
 			.calendar-btn-chevron {
-				font-size: 25px;
+				font-size: 1em;
 				color: $dark;
 				font-weight: 900;
 			}
@@ -58,10 +62,20 @@
 			.calendar-table {
 				text-align: center;
 				width: 100%;
-				color: $darkGray;
+				font-size: 0.9em;
+				font-weight: 600;
 
 				th, td {
-					padding: 5px 10px;
+					padding: 15px 10px;
+					color: $lightGray;
+
+					.calendar-btn-day {
+						color: $lightGray;
+
+						&.calendar-current-month {
+							color: $darkGray;	
+						}
+					}
 				}
 			}
 		}
