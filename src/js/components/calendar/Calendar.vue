@@ -24,6 +24,7 @@
 			<days-card 
 				v-if="mode == DAYS_MODE"
 				:date="date"
+				:ranges="ranges"
 				v-on:mode-changed="changeMode($event)"
 				v-on:date-changed="changeDate($event, MONTH_TYPE)"
 				v-model="dates"/>
@@ -58,6 +59,7 @@
 
 	export default {
 		components: {DaysCard, MonthsCard, YearsCard},
+		props: ['ranges'],
 		data() {
 			return {
 				dates: [],	

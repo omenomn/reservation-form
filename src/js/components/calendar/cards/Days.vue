@@ -3,6 +3,7 @@
 		:date="date"
 		v-on:mode-changed="$emit('mode-changed', $event)"
 		v-on:date-changed="$emit('date-changed', $event)">
+		<pre>{{ranges}}</pre>
 		<table class="calendar-table">
 		  <tr>
 		    <th v-for="(day, index) in daysOfWeek">
@@ -13,26 +14,13 @@
 		  <tr v-for="(week, index) in calendar">
 		    <td 
 		    	v-for="(cellDay, index) in week">
-		    	<div 
-		    		class="calendar-item-wrapper" 
-			    	:class="{
-			    		'range-in': isBetweenRange(cellDay),
-			    		'range-start': cellDay.isSame(dateFrom) && isRangeDates,
-			    		'range-end': cellDay.isSame(dateTo) && isRangeDates,
-			    	}">
-			    	<a 
-			    		href="#"
-			    		@click.prevent="setDates(cellDay)"
-			    		class="calendar-item pill"
-				    	:class="{
-				    		'text-dark': cellDay.month() == date.month(),
-				    		'text-light': cellDay.month() != date.month(),
-				    		'active': isActive(cellDay),
-				    		'range-point': isActive(cellDay) && isRangeDates,
-				    	}">
-			    		{{cellDay.format('D')}}
-			    	</a>
-			    </div>
+			    <day
+			    	:model="model"
+			    	:ranges="rangesDates"
+			    	:day="cellDay"
+			    	:date="date"
+			    	:is-range-dates="isRangeDates"
+			    	v-on:selected="setDates(cellDay)"/>
 		    </td>
 		  </tr>
 		</table>
@@ -42,10 +30,11 @@
 	import moment from 'moment'
 	import BaseCard from './Base'
 	import {MONTH_TYPE, MONTHS_MODE, YEARS_MODE} from './../Calendar'
+	import Day from './Day'
 
 	export default {
-		components: {BaseCard},
-		props: ['date', 'value'],
+		components: {BaseCard, Day},
+		props: ['date', 'value', 'ranges'],
 		data() {
 			return {
 				model: [...this.value] || [],
@@ -82,25 +71,26 @@
 
 				return Array(7).fill(0).map(() => date.add(1, 'day').format('ddd'))
 			},
-			modelDates() {
-				return this.model.map((date) => date.format(this.compareFormat))
-			},
 			isRangeDates() {
 				return this.model.length == 2
 			},
-			compareFormat() {
-				return 'YYYY-MM-DD'
-			},
-			dateFrom() {
-				return this.model[0] || moment()
-			},
-			dateTo() {
-				return this.model[1] || moment()
+			rangesDates() {
+				return this.ranges.map(
+					(range) => {
+						return range
+						.map((date) => moment(date))
+						.sort((date) => date.unix())
+					}
+				)
 			},
 		},
 		methods: {
 			setDates(date) {
 				var model = this.model
+
+				if (!this.checkDate(date)) {
+					return
+				}
 
 				if (model.length == 1) {
 
@@ -118,11 +108,10 @@
 					this.model.push(date)
 				}
 			},
-			isActive(day) {
-				return this.modelDates.includes(day.format(this.compareFormat));
-			},
-			isBetweenRange(day) {
-				return this.isRangeDates && day.isBetween(this.dateFrom, this.dateTo);
+			checkDate(date) {
+				return this.rangesDates.filter((range) => {
+					
+				}).length == 0
 			}
 		}
 	}

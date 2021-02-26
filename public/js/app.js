@@ -19,6 +19,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -94,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -117,6 +123,7 @@ var _DAY_TYPE = 'day';
     MonthsCard: _cards_Months__WEBPACK_IMPORTED_MODULE_3__.default,
     YearsCard: _cards_Years__WEBPACK_IMPORTED_MODULE_4__.default
   },
+  props: ['ranges'],
   data: function data() {
     return {
       dates: [],
@@ -234,6 +241,123 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['day', 'ranges', 'model', 'date', 'isRangeDates'],
+  computed: {
+    compareFormat: function compareFormat() {
+      return 'YYYY-MM-DD';
+    },
+    dayFormat: function dayFormat() {
+      return this.day.format(this.compareFormat);
+    },
+    rangesOthersIn: function rangesOthersIn() {
+      var _this = this;
+
+      return this.rangesFilter(function (dates) {
+        return _this.rangeIn(dates);
+      });
+    },
+    rangesOthersStart: function rangesOthersStart() {
+      var _this2 = this;
+
+      return this.rangesFilter(function (dates) {
+        return _this2.isSame(dates, _this2.dateFrom(dates));
+      });
+    },
+    rangesOthersEnd: function rangesOthersEnd() {
+      var _this3 = this;
+
+      return this.rangesFilter(function (dates) {
+        return _this3.isSame(dates, _this3.dateTo(dates));
+      });
+    },
+    activeOthers: function activeOthers() {
+      var _this4 = this;
+
+      return this.rangesFilter(function (dates) {
+        return _this4.isActive(dates);
+      });
+    },
+    rangePointOthers: function rangePointOthers() {
+      return this.rangesFilter(function (dates) {
+        return isActive(dates) && isRange(dates);
+      });
+    }
+  },
+  methods: {
+    isRange: function isRange(range) {
+      return Array.isArray(range) && range.length == 2;
+    },
+    isActive: function isActive(range) {
+      var _this5 = this;
+
+      return range.map(function (date) {
+        return date.format(_this5.compareFormat);
+      }).includes(this.dayFormat);
+    },
+    rangeIn: function rangeIn(range) {
+      return this.isRange(range) && this.day.isBetween(range[0], range[1]);
+    },
+    isSame: function isSame(range, date) {
+      return this.day.isSame(date) && this.isRange(range);
+    },
+    dateFrom: function dateFrom(range) {
+      return range[0];
+    },
+    dateTo: function dateTo(range) {
+      return range[1];
+    },
+    rangesFilter: function rangesFilter(method) {
+      return this.ranges.filter(method).length > 0;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Days.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Days.vue?vue&type=script&lang=js& ***!
@@ -249,6 +373,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Base */ "./src/js/components/calendar/cards/Base.vue");
 /* harmony import */ var _Calendar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../Calendar */ "./src/js/components/calendar/Calendar.vue");
+/* harmony import */ var _Day__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Day */ "./src/js/components/calendar/cards/Day.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -289,26 +414,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    BaseCard: _Base__WEBPACK_IMPORTED_MODULE_1__.default
+    BaseCard: _Base__WEBPACK_IMPORTED_MODULE_1__.default,
+    Day: _Day__WEBPACK_IMPORTED_MODULE_3__.default
   },
-  props: ['date', 'value'],
+  props: ['date', 'value', 'ranges'],
   data: function data() {
     return {
       model: _toConsumableArray(this.value) || []
@@ -352,29 +467,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return date.add(1, 'day').format('ddd');
       });
     },
-    modelDates: function modelDates() {
-      var _this = this;
-
-      return this.model.map(function (date) {
-        return date.format(_this.compareFormat);
-      });
-    },
     isRangeDates: function isRangeDates() {
       return this.model.length == 2;
     },
-    compareFormat: function compareFormat() {
-      return 'YYYY-MM-DD';
-    },
-    dateFrom: function dateFrom() {
-      return this.model[0] || moment__WEBPACK_IMPORTED_MODULE_0___default()();
-    },
-    dateTo: function dateTo() {
-      return this.model[1] || moment__WEBPACK_IMPORTED_MODULE_0___default()();
+    rangesDates: function rangesDates() {
+      return this.ranges.map(function (range) {
+        return range.map(function (date) {
+          return moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
+        }).sort(function (date) {
+          return date.unix();
+        });
+      });
     }
   },
   methods: {
     setDates: function setDates(date) {
       var model = this.model;
+
+      if (!this.checkDate(date)) {
+        return;
+      }
 
       if (model.length == 1) {
         var firstDate = model[0];
@@ -391,11 +503,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         this.model.push(date);
       }
     },
-    isActive: function isActive(day) {
-      return this.modelDates.includes(day.format(this.compareFormat));
-    },
-    isBetweenRange: function isBetweenRange(day) {
-      return this.isRangeDates && day.isBetween(this.dateFrom, this.dateTo);
+    checkDate: function checkDate(date) {
+      return this.rangesDates.filter(function (range) {}).length == 0;
     }
   }
 });
@@ -22175,6 +22284,45 @@ component.options.__file = "src/js/components/calendar/cards/Base.vue"
 
 /***/ }),
 
+/***/ "./src/js/components/calendar/cards/Day.vue":
+/*!**************************************************!*\
+  !*** ./src/js/components/calendar/cards/Day.vue ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Day.vue?vue&type=template&id=755fc36b& */ "./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b&");
+/* harmony import */ var _Day_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Day.vue?vue&type=script&lang=js& */ "./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Day_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/js/components/calendar/cards/Day.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./src/js/components/calendar/cards/Days.vue":
 /*!***************************************************!*\
   !*** ./src/js/components/calendar/cards/Days.vue ***!
@@ -22346,6 +22494,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Day_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Day.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Day_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./src/js/components/calendar/cards/Days.vue?vue&type=script&lang=js&":
 /*!****************************************************************************!*\
   !*** ./src/js/components/calendar/cards/Days.vue?vue&type=script&lang=js& ***!
@@ -22445,6 +22609,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b&":
+/*!*********************************************************************************!*\
+  !*** ./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b& ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Day_vue_vue_type_template_id_755fc36b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Day.vue?vue&type=template&id=755fc36b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b&");
+
+
+/***/ }),
+
 /***/ "./src/js/components/calendar/cards/Days.vue?vue&type=template&id=3a444b18&":
 /*!**********************************************************************************!*\
   !*** ./src/js/components/calendar/cards/Days.vue?vue&type=template&id=3a444b18& ***!
@@ -22514,7 +22695,19 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [_c("h1", [_vm._v("Hello world!")]), _vm._v(" "), _c("calendar")],
+    [
+      _c("h1", [_vm._v("Hello world!")]),
+      _vm._v(" "),
+      _c("calendar", {
+        attrs: {
+          ranges: [
+            ["2021-01-09", "2021-01-11"],
+            ["2021-01-08", "2021-01-15"],
+            ["2021-02-08", "2021-02-15"]
+          ]
+        }
+      })
+    ],
     1
   )
 }
@@ -22566,7 +22759,7 @@ var render = function() {
         _vm._v(" "),
         _vm.mode == _vm.DAYS_MODE
           ? _c("days-card", {
-              attrs: { date: _vm.date },
+              attrs: { date: _vm.date, ranges: _vm.ranges },
               on: {
                 "mode-changed": function($event) {
                   return _vm.changeMode($event)
@@ -22729,6 +22922,73 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Day.vue?vue&type=template&id=755fc36b& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "calendar-item-wrapper",
+      class: {
+        "range-in": _vm.rangeIn(_vm.model),
+        "range-start": _vm.isSame(_vm.model, _vm.dateFrom(_vm.model)),
+        "range-end": _vm.isSame(_vm.model, _vm.dateTo(_vm.model)),
+        "range-in-occupied": _vm.rangesOthersIn,
+        "range-start-occupied": _vm.rangesOthersStart,
+        "range-end-occupied": _vm.rangesOthersEnd
+      }
+    },
+    [
+      _c(
+        "a",
+        {
+          staticClass: "calendar-item pill",
+          class: {
+            "text-dark": _vm.day.month() == _vm.date.month(),
+            "text-light": _vm.day.month() != _vm.date.month(),
+            active:
+              _vm.isActive(_vm.model) ||
+              _vm.rangesFilter(function(dates) {
+                return _vm.isActive(dates)
+              }),
+            "range-point": _vm.isActive(_vm.model) && _vm.isRange(_vm.model),
+            "range-point-occupied": _vm.rangesFilter(function(dates) {
+              return _vm.isActive(dates) && _vm.isRange(dates)
+            })
+          },
+          attrs: { href: "#" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.$emit("selected")
+            }
+          }
+        },
+        [_vm._v("\n  \t\t" + _vm._s(_vm.day.format("D")) + "\n  \t")]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Days.vue?vue&type=template&id=3a444b18&":
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/calendar/cards/Days.vue?vue&type=template&id=3a444b18& ***!
@@ -22759,6 +23019,8 @@ var render = function() {
       }
     },
     [
+      _c("pre", [_vm._v(_vm._s(_vm.ranges))]),
+      _vm._v(" "),
       _c(
         "table",
         { staticClass: "calendar-table" },
@@ -22779,50 +23041,26 @@ var render = function() {
             return _c(
               "tr",
               _vm._l(week, function(cellDay, index) {
-                return _c("td", [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "calendar-item-wrapper",
-                      class: {
-                        "range-in": _vm.isBetweenRange(cellDay),
-                        "range-start":
-                          cellDay.isSame(_vm.dateFrom) && _vm.isRangeDates,
-                        "range-end":
-                          cellDay.isSame(_vm.dateTo) && _vm.isRangeDates
+                return _c(
+                  "td",
+                  [
+                    _c("day", {
+                      attrs: {
+                        model: _vm.model,
+                        ranges: _vm.rangesDates,
+                        day: cellDay,
+                        date: _vm.date,
+                        "is-range-dates": _vm.isRangeDates
+                      },
+                      on: {
+                        selected: function($event) {
+                          return _vm.setDates(cellDay)
+                        }
                       }
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "calendar-item pill",
-                          class: {
-                            "text-dark": cellDay.month() == _vm.date.month(),
-                            "text-light": cellDay.month() != _vm.date.month(),
-                            active: _vm.isActive(cellDay),
-                            "range-point":
-                              _vm.isActive(cellDay) && _vm.isRangeDates
-                          },
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.setDates(cellDay)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n\t\t    \t\t" +
-                              _vm._s(cellDay.format("D")) +
-                              "\n\t\t    \t"
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                ])
+                    })
+                  ],
+                  1
+                )
               }),
               0
             )
