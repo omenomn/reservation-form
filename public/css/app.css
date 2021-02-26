@@ -14,6 +14,9 @@
 .calendar-wrapper .calendar-fields .calendar-field,
 .calendar-wrapper .calendar-fields .calendar-field-arrow {
   display: inline-block;
+  color: #9e9e9e;
+  font-weight: 500;
+  font-size: 1.4em;
 }
 .calendar-wrapper .calendar-fields .calendar-field-arrow {
   padding-left: 10px;
@@ -54,16 +57,80 @@
   width: 100%;
   font-size: 0.9em;
   font-weight: 600;
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 .calendar-wrapper .calendar .calendar-body .calendar-table th, .calendar-wrapper .calendar .calendar-body .calendar-table td {
-  padding: 15px 10px;
+  color: #d5d3d4;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0px;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-in, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-in {
+  background: #c3fef8;
+  color: #fff;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-in .calendar-item, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-in .calendar-item {
+  color: #00dbb1;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-start, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-start {
+  position: relative;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-start:before, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-start:before {
+  content: " ";
+  position: absolute;
+  left: 50%;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background: #c3fef8;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-end, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-end {
+  position: relative;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item-wrapper.range-end:before, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item-wrapper.range-end:before {
+  content: " ";
+  position: absolute;
+  right: 50%;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background: #c3fef8;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  padding: 5px;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.text-dark, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.text-dark {
+  color: #9e9e9e;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.text-light, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.text-light {
   color: #d5d3d4;
 }
-.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-btn-day, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-btn-day {
-  color: #d5d3d4;
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.pill, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.pill {
+  border-radius: 50%;
 }
-.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-btn-day.calendar-current-month, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-btn-day.calendar-current-month {
-  color: #a6a8b2;
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.active, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.active {
+  position: relative;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.active:before, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.active:before {
+  content: " ";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  border: 4px solid #00dbb1;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.active.pill:before, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.active.pill:before {
+  border-radius: 50%;
+}
+.calendar-wrapper .calendar .calendar-body .calendar-table th .calendar-item.range-point, .calendar-wrapper .calendar .calendar-body .calendar-table td .calendar-item.range-point {
+  background: #00dbb1;
+  color: #fff;
 }
 .calendar-wrapper .calendar .calendar-btn {
   display: inline-block;

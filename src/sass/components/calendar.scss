@@ -15,6 +15,9 @@
 		.calendar-field,
 		.calendar-field-arrow {
 			display: inline-block;
+			color: $darkGray;	
+			font-weight: 500;
+			font-size: 1.4em;
 		}
 
 		.calendar-field-arrow {
@@ -64,16 +67,94 @@
 				width: 100%;
 				font-size: 0.9em;
 				font-weight: 600;
+				border-spacing: 0;
+    			border-collapse: collapse;
 
 				th, td {
-					padding: 15px 10px;
 					color: $lightGray;
+					text-align: center;
+					vertical-align: middle;
+					padding: 0px;
 
-					.calendar-btn-day {
-						color: $lightGray;
+					.calendar-item-wrapper {
+						&.range-in {
+							background: $lightGreen;
+							color: $white;	
 
-						&.calendar-current-month {
+							.calendar-item {
+								color: $green;
+							}					
+						}
+
+						&.range-start {
+							position: relative;	
+
+							&:before {
+								content: ' ';
+								position: absolute;
+								left: 50%;
+								right: 0px;
+								top: 0px;
+								bottom: 0px;
+								background: $lightGreen;
+							}					
+						}
+
+						&.range-end {
+							position: relative;	
+
+							&:before {
+								content: ' ';
+								position: absolute;
+								right: 50%;
+								left: 0px;
+								top: 0px;
+								bottom: 0px;
+								background: $lightGreen;
+							}					
+						}
+					}
+
+					.calendar-item {
+						width: 40px;
+						height: 40px;
+						line-height: 40px;
+						display: inline-block;
+						padding: 5px;
+
+						&.text-dark {
 							color: $darkGray;	
+						}
+
+						&.text-light {
+							color: $lightGray;	
+						}
+
+						&.pill {
+							border-radius: 50%;
+						}
+
+						&.active {
+							position:relative;
+
+							&:before {
+								content: ' ';
+								position: absolute;
+								top: 0px;
+								bottom: 0px;
+								left: 0px;
+								right: 0px;
+								border: 4px solid $green;
+							}
+							
+							&.pill:before {		
+								border-radius: 50%;
+							}
+						}
+
+						&.range-point {
+							background: $green;
+							color: $white;
 						}
 					}
 				}
