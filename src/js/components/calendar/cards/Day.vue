@@ -12,7 +12,7 @@
   	<a 
   		href="#"
   		@click.prevent="$emit('selected')"
-  		class="calendar-item pill"
+  		class="calendar-item pill day"
     	:class="{
     		'text-dark': day.month() == date.month(),
     		'text-light': day.month() != date.month(),

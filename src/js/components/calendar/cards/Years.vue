@@ -14,7 +14,11 @@
 				<td v-for="(year, index) in row">
 					<a 
 						href="#"
-		    		class="calendar-item text-dark">
+						@click.prevent="$emit('selected', year)"
+		    		class="calendar-item text-dark"
+		    		:class="{
+		    			'active': date.year() == year
+		    		}">
 			    	{{year}}
 			    </a>
 			  </td>

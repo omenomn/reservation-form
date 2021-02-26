@@ -3,7 +3,6 @@
 		:date="date"
 		v-on:mode-changed="$emit('mode-changed', $event)"
 		v-on:date-changed="$emit('date-changed', $event)">
-		<pre>{{ranges}}</pre>
 		<table class="calendar-table">
 		  <tr>
 		    <th v-for="(day, index) in daysOfWeek">
@@ -110,7 +109,7 @@
 			},
 			checkDate(date) {
 				return this.rangesDates.filter((range) => {
-					
+
 				}).length == 0
 			}
 		}

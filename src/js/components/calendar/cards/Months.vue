@@ -8,7 +8,11 @@
 				<td v-for="(month, index) in row">
 					<a 
 						href="#"
-		    		class="calendar-item text-dark">
+						@click.prevent="$emit('selected', month)"
+		    		class="calendar-item text-dark"
+		    		:class="{
+		    			'active': date.month() == month.month()
+		    		}">
 			    	{{month.format('MMMM')}}
 			    </a>
 			  </td>

@@ -24,10 +24,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Calendar: _components_calendar_Calendar__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  data: function data() {
+    return {
+      form: {
+        dates: []
+      }
+    };
   }
 });
 
@@ -98,8 +107,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -123,10 +130,10 @@ var _DAY_TYPE = 'day';
     MonthsCard: _cards_Months__WEBPACK_IMPORTED_MODULE_3__.default,
     YearsCard: _cards_Years__WEBPACK_IMPORTED_MODULE_4__.default
   },
-  props: ['ranges'],
+  props: ['ranges', 'value', 'format'],
   data: function data() {
     return {
-      dates: [],
+      dates: this.value || [],
       date: moment__WEBPACK_IMPORTED_MODULE_1___default()(),
       mode: _DAYS_MODE
     };
@@ -157,9 +164,16 @@ var _DAY_TYPE = 'day';
       return 9;
     },
     modelDates: function modelDates() {
+      var _this = this;
+
       return this.dates.map(function (date) {
-        return date.format();
+        return date.format(_this.format);
       });
+    }
+  },
+  watch: {
+    dates: function dates(_dates) {
+      this.$emit('input', _dates);
     }
   },
   methods: {
@@ -167,6 +181,11 @@ var _DAY_TYPE = 'day';
       var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _MONTH_TYPE;
       var period = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
       this.date = this.date[medhod](period, type).clone();
+    },
+    setDate: function setDate() {
+      var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _MONTH_TYPE;
+      var value = arguments.length > 1 ? arguments[1] : undefined;
+      this.date = this.date[method](value).clone();
     },
     changeMode: function changeMode(mode) {
       if (this.mode != mode) {
@@ -413,7 +432,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
 
 
 
@@ -544,6 +562,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -594,6 +616,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Base */ "./src/js/components/calendar/cards/Base.vue");
 /* harmony import */ var _Calendar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../Calendar */ "./src/js/components/calendar/Calendar.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -22696,15 +22722,23 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h1", [_vm._v("Hello world!")]),
+      _c("pre", [_vm._v(_vm._s(_vm.form))]),
       _vm._v(" "),
       _c("calendar", {
         attrs: {
+          format: "DD-MM-YYYY",
           ranges: [
             ["2021-01-09", "2021-01-11"],
             ["2021-01-08", "2021-01-15"],
             ["2021-02-08", "2021-02-15"]
           ]
+        },
+        model: {
+          value: _vm.form.dates,
+          callback: function($$v) {
+            _vm.$set(_vm.form, "dates", $$v)
+          },
+          expression: "form.dates"
         }
       })
     ],
@@ -22735,8 +22769,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("p", [_vm._v("Calendar " + _vm._s(_vm.id))]),
-    _vm._v(" "),
     _c(
       "div",
       { staticClass: "calendar-wrapper" },
@@ -22787,6 +22819,10 @@ var render = function() {
                 },
                 "date-changed": function($event) {
                   return _vm.changeDate($event, _vm.YEAR_TYPE)
+                },
+                selected: function($event) {
+                  _vm.setDate(_vm.MONTH_TYPE, $event.month())
+                  _vm.mode = _vm.DAYS_MODE
                 }
               }
             })
@@ -22799,8 +22835,9 @@ var render = function() {
                 "mode-changed": function($event) {
                   return _vm.changeMode($event)
                 },
-                "date-changed": function($event) {
-                  _vm.cardKey++
+                selected: function($event) {
+                  _vm.setDate(_vm.YEAR_TYPE, $event)
+                  _vm.mode = _vm.MONTHS_MODE
                 }
               }
             })
@@ -22955,7 +22992,7 @@ var render = function() {
       _c(
         "a",
         {
-          staticClass: "calendar-item pill",
+          staticClass: "calendar-item pill day",
           class: {
             "text-dark": _vm.day.month() == _vm.date.month(),
             "text-light": _vm.day.month() != _vm.date.month(),
@@ -23019,8 +23056,6 @@ var render = function() {
       }
     },
     [
-      _c("pre", [_vm._v(_vm._s(_vm.ranges))]),
-      _vm._v(" "),
       _c(
         "table",
         { staticClass: "calendar-table" },
@@ -23120,7 +23155,16 @@ var render = function() {
                   "a",
                   {
                     staticClass: "calendar-item text-dark",
-                    attrs: { href: "#" }
+                    class: {
+                      active: _vm.date.month() == month.month()
+                    },
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.$emit("selected", month)
+                      }
+                    }
                   },
                   [
                     _vm._v(
@@ -23212,7 +23256,16 @@ var render = function() {
                   "a",
                   {
                     staticClass: "calendar-item text-dark",
-                    attrs: { href: "#" }
+                    class: {
+                      active: _vm.date.year() == year
+                    },
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.$emit("selected", year)
+                      }
+                    }
                   },
                   [_vm._v("\n\t\t    \t" + _vm._s(year) + "\n\t\t    ")]
                 )

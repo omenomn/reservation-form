@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<p>Calendar {{id}}</p>
-	<!-- 	<pre>{{dates}}</pre>
-		<pre>{{modelDates}}</pre> -->
 		<div class="calendar-wrapper">
 			<div class="calendar-fields">
 				<input 
@@ -32,13 +29,14 @@
 				v-if="mode == MONTHS_MODE"
 				:date="date"
 				v-on:mode-changed="changeMode($event)"
-				v-on:date-changed="changeDate($event, YEAR_TYPE)"/>		
+				v-on:date-changed="changeDate($event, YEAR_TYPE)"
+				v-on:selected="setDate(MONTH_TYPE, $event.month()); mode = DAYS_MODE"/>		
 			<years-card 
 				v-if="mode == YEARS_MODE"
 				:date="date"
 				:period="yearsPeriod"
 				v-on:mode-changed="changeMode($event)"
-				v-on:date-changed="cardKey++"/>			
+				v-on:selected="setDate(YEAR_TYPE,$event); mode = MONTHS_MODE"/>			
 		</div>
 	</div>
 </template>
@@ -59,10 +57,10 @@
 
 	export default {
 		components: {DaysCard, MonthsCard, YearsCard},
-		props: ['ranges'],
+		props: ['ranges', 'value', 'format'],
 		data() {
 			return {
-				dates: [],	
+				dates: this.value || [],	
 				date: moment(),
 				mode: DAYS_MODE,
 			}
@@ -79,7 +77,12 @@
 			YEAR_TYPE: () => YEAR_TYPE,
 			yearsPeriod: () => 9,
 			modelDates() {
-				return this.dates.map((date) => date.format())
+				return this.dates.map((date) => date.format(this.format))
+			}
+		},
+		watch: {
+			dates(dates) {
+				this.$emit('input', dates)
 			}
 		},
 		methods: {
@@ -89,6 +92,12 @@
 				period = 1
 			) {
 				this.date = this.date.[medhod](period, type).clone()
+			},
+			setDate(
+				method = MONTH_TYPE, 
+				value
+			) {
+				this.date = this.date.[method](value).clone()
 			},
 			changeMode(mode) {
 				if (this.mode != mode) {
