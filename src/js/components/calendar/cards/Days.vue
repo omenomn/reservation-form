@@ -15,7 +15,7 @@
 		    	v-for="(cellDay, index) in week">
 			    <day
 			    	:model="model"
-			    	:ranges="rangesDates"
+			    	:ranges="occupiedRangesMoment"
 			    	:day="cellDay"
 			    	:date="date"
 			    	:is-range-dates="isRangeDates"
@@ -33,7 +33,7 @@
 
 	export default {
 		components: {BaseCard, Day},
-		props: ['date', 'value', 'ranges'],
+		props: ['date', 'value', 'occupiedRanges', 'overlap'],
 		data() {
 			return {
 				model: [...this.value] || [],
@@ -73,27 +73,27 @@
 			isRangeDates() {
 				return this.model.length == 2
 			},
-			rangesDates() {
-				return this.ranges.map(
-					(range) => {
-						return range
-						.map((date) => moment(date))
-						.sort((date) => date.unix())
-					}
-				)
+			occupiedRangesMoment() {
+				return Array.isArray(this.occupiedRanges) ? this.occupiedRanges.map(
+					(range) => range.map((date) => moment(date))
+				) : []
 			},
 		},
 		methods: {
 			setDates(date) {
 				var model = this.model
 
-				if (!this.checkDate(date)) {
+				if (!this.notBetweenOccupiedRanges(date) && !this.overlap) {
 					return
 				}
 
 				if (model.length == 1) {
 
 					var firstDate = model[0]
+
+					if (this.overlapOccupiedRanges([firstDate, date]) && !this.overlap) {
+						return
+					}
 
 					if (firstDate.isBefore(date)) {
 						this.model.push(date)
@@ -107,10 +107,30 @@
 					this.model.push(date)
 				}
 			},
-			checkDate(date) {
-				return this.rangesDates.filter((range) => {
-
-				}).length == 0
+			notBetweenOccupiedRanges(date) {
+				return this.occupiedRangesMoment.filter(
+					(range) => this.inRange(
+						date.unix(), 
+						...this.unixRange(range)
+					)
+				).length == 0
+			},
+			overlapOccupiedRanges(modelRange) {
+				return this.occupiedRangesMoment.filter(
+					(occupiedRange) => this.checkOverlap(
+						...this.unixRange(modelRange),
+						...this.unixRange(occupiedRange),
+					)
+				).length > 0
+			},
+			unixRange(range) {
+				return range.map((d) => d.unix()).sort()
+			},
+			inRange(date, start, end) {
+				return date >= start && date <= end
+			},
+			checkOverlap(startOne, endOne, startTwo, endTwo) {
+				return startOne <= endTwo && endOne >= startTwo
 			}
 		}
 	}

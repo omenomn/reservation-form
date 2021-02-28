@@ -4,15 +4,8 @@
 			<button
 				@click="$emit('date-changed', 'subtract')"
 				type="button"
-				class="calendar-btn calendar-btn-chevron float-left">
-				<i class="fas fa-chevron-left"></i>
-			</button>
-			<button
-				@click="$emit('date-changed', 'add')"
-				type="button"
-				class="calendar-btn calendar-btn-chevron float-right">
-				<i class="fas fa-chevron-right"></i>
-			</button>				
+				class="calendar-btn calendar-btn-chevron calendar-btn-chevron-left">
+			</button>		
 			<span v-if="!$slots.header">
 				<a 
 					href="#"
@@ -24,6 +17,11 @@
 					class="calendar-btn">{{date.year()}}</a>
 			</span>
 			<slot v-else name="header"/>
+			<button
+				@click="$emit('date-changed', 'add')"
+				type="button"
+				class="calendar-btn calendar-btn-chevron calendar-btn-chevron-right">
+			</button>		
 		</div>
 		<div class="calendar-body">
 			<slot/>

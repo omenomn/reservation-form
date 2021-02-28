@@ -1,13 +1,19 @@
 <template>
 	<div>
-		<div class="calendar-wrapper">
+		<div 
+			:id="id"
+			class="calendar-wrapper"
+			:class="{
+				'show': toggle
+			}">
 			<div class="calendar-fields">
 				<input 
 					:value="modelDates[0] || ''"
 					type="text"
 					placeholder="Check in" 
 					class="calendar-field field"
-					:readonly="true"/>
+					:readonly="true"
+					@click="toggle = true"/>
 				<div class="calendar-field-arrow">
 					<i class="fas fa-arrow-right"></i>
 				</div>
@@ -16,12 +22,14 @@
 					type="text"
 					placeholder="Check out"
 					class="calendar-field field"
-					:readonly="true"/>
+					:readonly="true"
+					@click="toggle = true"/>
 			</div>
 			<days-card 
 				v-if="mode == DAYS_MODE"
 				:date="date"
-				:ranges="ranges"
+				:occupied-ranges="ranges"
+				:overlap="overlap"
 				v-on:mode-changed="changeMode($event)"
 				v-on:date-changed="changeDate($event, MONTH_TYPE)"
 				v-model="dates"/>
@@ -57,17 +65,18 @@
 
 	export default {
 		components: {DaysCard, MonthsCard, YearsCard},
-		props: ['ranges', 'value', 'format'],
+		props: ['ranges', 'value', 'format', 'overlap'],
 		data() {
 			return {
 				dates: this.value || [],	
 				date: moment(),
 				mode: DAYS_MODE,
+				toggle: false,
 			}
 		},
 		computed: {
 			id() {
-				return makeId()
+				return 'calendar'+makeId()
 			},
 			DAYS_MODE: () => DAYS_MODE,
 			MONTHS_MODE: () => MONTHS_MODE,
@@ -108,6 +117,13 @@
 					this.mode = MONTHS_MODE
 				}
 			}
+		},
+		mounted() {
+			window.addEventListener("click", (event) => {
+				if (!event.path.map((el) => el.id).includes(this.id)) {
+					this.toggle = false
+				}
+			});
 		}
 	}
 </script>

@@ -1,10 +1,13 @@
 @import './_variables';
 @import './components/calendar';
+@import './components/reserve_card';
+@import './components/stars';
 
 body {
 	background: #ececec;
 	font-family: 'Lato', sans-serif;
 	font-size: 16px;
+	color: $darkGray;
 }
 
 a {
@@ -21,6 +24,13 @@ input, textarea {
 	}
 }
 
+label {
+	font-weight: 700;
+	color: $darkGray;
+	margin-bottom: 5px;
+	display: block;
+}
+
 .float-right {
 	float: right;
 }
@@ -28,4 +38,3 @@ input, textarea {
 .float-left {
 	float: left;
 }
-

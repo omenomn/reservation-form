@@ -1,0 +1,58 @@
+
+
+.card {
+	display: inline-block;
+	padding: 15px 20px;
+	border: 1px solid $lightGray;
+}
+
+
+
+.reserve-card {
+	width: 400px;
+
+	h3 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		font-size: 25px;
+		font-weight: 700;
+	}
+
+	.divider {
+		display: block;
+		border-top: 1px solid $lightGray;
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+
+	.btn {
+		display: block;
+		width: 100%;
+		background: $red;
+		text-decoration: none;
+		color: $white;
+		border: none;
+		cursor: pointer;
+		outline: 0;
+		transition: 
+			color .15s ease-in-out,
+			background-color .15s ease-in-out,
+			border-color .15s ease-in-out,
+			box-shadow .15s ease-in-out;
+		border-radius: 4px;
+		padding: 5px 10px;
+		font-size: 1.4em;
+		height: 2em;
+
+		&:focus {
+			border-color: $green;
+			box-shadow: 0 0 0 0.25rem rgb(7 176 144 / 50%);
+		}
+	}
+
+	p {
+		font-size: 1em;
+		line-height: 1em;
+		font-weight: 700;
+	}
+}

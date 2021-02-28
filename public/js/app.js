@@ -13,6 +13,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _components_calendar_Calendar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/calendar/Calendar */ "./src/js/components/calendar/Calendar.vue");
+/* harmony import */ var _components_Stars__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Stars */ "./src/js/components/Stars.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -27,16 +48,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Calendar: _components_calendar_Calendar__WEBPACK_IMPORTED_MODULE_0__.default
+    Calendar: _components_calendar_Calendar__WEBPACK_IMPORTED_MODULE_0__.default,
+    Stars: _components_Stars__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     return {
       form: {
-        dates: []
+        dates: [],
+        overlap: false
       }
     };
+  },
+  methods: {
+    send: function send(form) {
+      console.log(form);
+    }
   }
 });
 
@@ -107,6 +136,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -130,17 +167,18 @@ var _DAY_TYPE = 'day';
     MonthsCard: _cards_Months__WEBPACK_IMPORTED_MODULE_3__.default,
     YearsCard: _cards_Years__WEBPACK_IMPORTED_MODULE_4__.default
   },
-  props: ['ranges', 'value', 'format'],
+  props: ['ranges', 'value', 'format', 'overlap'],
   data: function data() {
     return {
       dates: this.value || [],
       date: moment__WEBPACK_IMPORTED_MODULE_1___default()(),
-      mode: _DAYS_MODE
+      mode: _DAYS_MODE,
+      toggle: false
     };
   },
   computed: {
     id: function id() {
-      return (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.makeId)();
+      return 'calendar' + (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.makeId)();
     },
     DAYS_MODE: function DAYS_MODE() {
       return _DAYS_MODE;
@@ -196,6 +234,17 @@ var _DAY_TYPE = 'day';
         this.mode = _MONTHS_MODE;
       }
     }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    window.addEventListener("click", function (event) {
+      if (!event.path.map(function (el) {
+        return el.id;
+      }).includes(_this2.id)) {
+        _this2.toggle = false;
+      }
+    });
   }
 });
 
@@ -213,8 +262,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Calendar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../Calendar */ "./src/js/components/calendar/Calendar.vue");
-//
-//
 //
 //
 //
@@ -299,9 +346,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['day', 'ranges', 'model', 'date', 'isRangeDates'],
@@ -353,7 +397,7 @@ __webpack_require__.r(__webpack_exports__);
     isActive: function isActive(range) {
       var _this5 = this;
 
-      return range.map(function (date) {
+      return range.length == 1 && range.map(function (date) {
         return date.format(_this5.compareFormat);
       }).includes(this.dayFormat);
     },
@@ -371,6 +415,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     rangesFilter: function rangesFilter(method) {
       return this.ranges.filter(method).length > 0;
+    },
+    rangePoint: function rangePoint(range) {
+      var _this6 = this;
+
+      return range.length == 2 && range.map(function (date) {
+        return date.format(_this6.compareFormat);
+      }).includes(this.dayFormat);
     }
   }
 });
@@ -441,7 +492,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     BaseCard: _Base__WEBPACK_IMPORTED_MODULE_1__.default,
     Day: _Day__WEBPACK_IMPORTED_MODULE_3__.default
   },
-  props: ['date', 'value', 'ranges'],
+  props: ['date', 'value', 'occupiedRanges', 'overlap'],
   data: function data() {
     return {
       model: _toConsumableArray(this.value) || []
@@ -488,26 +539,28 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     isRangeDates: function isRangeDates() {
       return this.model.length == 2;
     },
-    rangesDates: function rangesDates() {
-      return this.ranges.map(function (range) {
+    occupiedRangesMoment: function occupiedRangesMoment() {
+      return Array.isArray(this.occupiedRanges) ? this.occupiedRanges.map(function (range) {
         return range.map(function (date) {
           return moment__WEBPACK_IMPORTED_MODULE_0___default()(date);
-        }).sort(function (date) {
-          return date.unix();
         });
-      });
+      }) : [];
     }
   },
   methods: {
     setDates: function setDates(date) {
       var model = this.model;
 
-      if (!this.checkDate(date)) {
+      if (!this.notBetweenOccupiedRanges(date) && !this.overlap) {
         return;
       }
 
       if (model.length == 1) {
         var firstDate = model[0];
+
+        if (this.overlapOccupiedRanges([firstDate, date]) && !this.overlap) {
+          return;
+        }
 
         if (firstDate.isBefore(date)) {
           this.model.push(date);
@@ -521,8 +574,30 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         this.model.push(date);
       }
     },
-    checkDate: function checkDate(date) {
-      return this.rangesDates.filter(function (range) {}).length == 0;
+    notBetweenOccupiedRanges: function notBetweenOccupiedRanges(date) {
+      var _this = this;
+
+      return this.occupiedRangesMoment.filter(function (range) {
+        return _this.inRange.apply(_this, [date.unix()].concat(_toConsumableArray(_this.unixRange(range))));
+      }).length == 0;
+    },
+    overlapOccupiedRanges: function overlapOccupiedRanges(modelRange) {
+      var _this2 = this;
+
+      return this.occupiedRangesMoment.filter(function (occupiedRange) {
+        return _this2.checkOverlap.apply(_this2, _toConsumableArray(_this2.unixRange(modelRange)).concat(_toConsumableArray(_this2.unixRange(occupiedRange))));
+      }).length > 0;
+    },
+    unixRange: function unixRange(range) {
+      return range.map(function (d) {
+        return d.unix();
+      }).sort();
+    },
+    inRange: function inRange(date, start, end) {
+      return date >= start && date <= end;
+    },
+    checkOverlap: function checkOverlap(startOne, endOne, startTwo, endTwo) {
+      return startOne <= endTwo && endOne >= startTwo;
     }
   }
 });
@@ -22226,6 +22301,43 @@ component.options.__file = "src/js/App.vue"
 
 /***/ }),
 
+/***/ "./src/js/components/Stars.vue":
+/*!*************************************!*\
+  !*** ./src/js/components/Stars.vue ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Stars.vue?vue&type=template&id=71a9f6c5& */ "./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__.default)(
+  script,
+  _Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/js/components/Stars.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./src/js/components/calendar/Calendar.vue":
 /*!*************************************************!*\
   !*** ./src/js/components/calendar/Calendar.vue ***!
@@ -22601,6 +22713,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5&":
+/*!********************************************************************!*\
+  !*** ./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5& ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stars_vue_vue_type_template_id_71a9f6c5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Stars.vue?vue&type=template&id=71a9f6c5& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5&");
+
+
+/***/ }),
+
 /***/ "./src/js/components/calendar/Calendar.vue?vue&type=template&id=76c156da&":
 /*!********************************************************************************!*\
   !*** ./src/js/components/calendar/Calendar.vue?vue&type=template&id=76c156da& ***!
@@ -22719,30 +22848,168 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("pre", [_vm._v(_vm._s(_vm.form))]),
+  return _c("div", [
+    _c("div", { staticClass: "card reserve-card" }, [
+      _c("h3", [_vm._v("300 zł")]),
       _vm._v(" "),
-      _c("calendar", {
-        attrs: {
-          format: "DD-MM-YYYY",
-          ranges: [
-            ["2021-01-09", "2021-01-11"],
-            ["2021-01-08", "2021-01-15"],
-            ["2021-02-08", "2021-02-15"]
-          ]
+      _c(
+        "p",
+        { staticClass: "d-inline" },
+        [_c("stars"), _vm._v("\n      123\n    ")],
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "divider" }),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.send(_vm.form)
+            }
+          }
         },
-        model: {
-          value: _vm.form.dates,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "dates", $$v)
+        [
+          _c("label", [_vm._v("Dates")]),
+          _vm._v(" "),
+          _c("calendar", {
+            attrs: {
+              format: "DD-MM-YYYY",
+              ranges: [
+                ["2021-01-09", "2021-01-11"],
+                ["2021-01-08", "2021-01-15"],
+                ["2021-02-08", "2021-02-15"]
+              ],
+              overlap: _vm.form.overlap
+            },
+            model: {
+              value: _vm.form.dates,
+              callback: function($$v) {
+                _vm.$set(_vm.form, "dates", $$v)
+              },
+              expression: "form.dates"
+            }
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "overlap" } }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.overlap,
+                  expression: "form.overlap"
+                }
+              ],
+              attrs: { type: "checkbox", id: "overlap" },
+              domProps: {
+                checked: Array.isArray(_vm.form.overlap)
+                  ? _vm._i(_vm.form.overlap, null) > -1
+                  : _vm.form.overlap
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.form.overlap,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 &&
+                        _vm.$set(_vm.form, "overlap", $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        _vm.$set(
+                          _vm.form,
+                          "overlap",
+                          $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                        )
+                    }
+                  } else {
+                    _vm.$set(_vm.form, "overlap", $$c)
+                  }
+                }
+              }
+            }),
+            _vm._v(
+              "\n          Zaznaczenie pola, umożliwia zaznaczenie zakresu dat nakładającego sie na zajety (czerwony) zakres\n      "
+            )
+          ]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn" }, [_vm._v("Wyślij")])
+        ],
+        1
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5&":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/js/components/Stars.vue?vue&type=template&id=71a9f6c5& ***!
+  \***********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "span",
+    { staticClass: "stars", attrs: { "data-stars": "5" } },
+    _vm._l(5, function(num) {
+      return _c("span", { staticClass: "star-wrapper" }, [
+        _c(
+          "svg",
+          {
+            staticClass: "star",
+            attrs: { height: "25", width: "23", "data-rating": "1" }
           },
-          expression: "form.dates"
-        }
-      })
-    ],
-    1
+          [
+            _c("polygon", {
+              staticStyle: { "fill-rule": "nonzero" },
+              attrs: {
+                points: "9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78"
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "svg",
+          {
+            staticClass: "star on",
+            attrs: { height: "25", width: "23", "data-rating": "1" }
+          },
+          [
+            _c("polygon", {
+              staticStyle: { "fill-rule": "nonzero" },
+              attrs: {
+                points: "9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78"
+              }
+            })
+          ]
+        )
+      ])
+    }),
+    0
   )
 }
 var staticRenderFns = []
@@ -22771,13 +23038,24 @@ var render = function() {
   return _c("div", [
     _c(
       "div",
-      { staticClass: "calendar-wrapper" },
+      {
+        staticClass: "calendar-wrapper",
+        class: {
+          show: _vm.toggle
+        },
+        attrs: { id: _vm.id }
+      },
       [
         _c("div", { staticClass: "calendar-fields" }, [
           _c("input", {
             staticClass: "calendar-field field",
             attrs: { type: "text", placeholder: "Check in", readonly: true },
-            domProps: { value: _vm.modelDates[0] || "" }
+            domProps: { value: _vm.modelDates[0] || "" },
+            on: {
+              click: function($event) {
+                _vm.toggle = true
+              }
+            }
           }),
           _vm._v(" "),
           _vm._m(0),
@@ -22785,13 +23063,22 @@ var render = function() {
           _c("input", {
             staticClass: "calendar-field field",
             attrs: { type: "text", placeholder: "Check out", readonly: true },
-            domProps: { value: _vm.modelDates[1] || "" }
+            domProps: { value: _vm.modelDates[1] || "" },
+            on: {
+              click: function($event) {
+                _vm.toggle = true
+              }
+            }
           })
         ]),
         _vm._v(" "),
         _vm.mode == _vm.DAYS_MODE
           ? _c("days-card", {
-              attrs: { date: _vm.date, ranges: _vm.ranges },
+              attrs: {
+                date: _vm.date,
+                "occupied-ranges": _vm.ranges,
+                overlap: _vm.overlap
+              },
               on: {
                 "mode-changed": function($event) {
                   return _vm.changeMode($event)
@@ -22884,33 +23171,16 @@ var render = function() {
       "div",
       { staticClass: "calendar-header" },
       [
-        _c(
-          "button",
-          {
-            staticClass: "calendar-btn calendar-btn-chevron float-left",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                return _vm.$emit("date-changed", "subtract")
-              }
+        _c("button", {
+          staticClass:
+            "calendar-btn calendar-btn-chevron calendar-btn-chevron-left",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.$emit("date-changed", "subtract")
             }
-          },
-          [_c("i", { staticClass: "fas fa-chevron-left" })]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "calendar-btn calendar-btn-chevron float-right",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                return _vm.$emit("date-changed", "add")
-              }
-            }
-          },
-          [_c("i", { staticClass: "fas fa-chevron-right" })]
-        ),
+          }
+        }),
         _vm._v(" "),
         !_vm.$slots.header
           ? _c("span", [
@@ -22944,7 +23214,18 @@ var render = function() {
                 [_vm._v(_vm._s(_vm.date.year()))]
               )
             ])
-          : _vm._t("header")
+          : _vm._t("header"),
+        _vm._v(" "),
+        _c("button", {
+          staticClass:
+            "calendar-btn calendar-btn-chevron calendar-btn-chevron-right",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.$emit("date-changed", "add")
+            }
+          }
+        })
       ],
       2
     ),
@@ -22996,14 +23277,10 @@ var render = function() {
           class: {
             "text-dark": _vm.day.month() == _vm.date.month(),
             "text-light": _vm.day.month() != _vm.date.month(),
-            active:
-              _vm.isActive(_vm.model) ||
-              _vm.rangesFilter(function(dates) {
-                return _vm.isActive(dates)
-              }),
-            "range-point": _vm.isActive(_vm.model) && _vm.isRange(_vm.model),
+            active: _vm.isActive(_vm.model),
+            "range-point": _vm.rangePoint(_vm.model),
             "range-point-occupied": _vm.rangesFilter(function(dates) {
-              return _vm.isActive(dates) && _vm.isRange(dates)
+              return _vm.rangePoint(dates)
             })
           },
           attrs: { href: "#" },
@@ -23082,7 +23359,7 @@ var render = function() {
                     _c("day", {
                       attrs: {
                         model: _vm.model,
-                        ranges: _vm.rangesDates,
+                        ranges: _vm.occupiedRangesMoment,
                         day: cellDay,
                         date: _vm.date,
                         "is-range-dates": _vm.isRangeDates

@@ -16,12 +16,9 @@
     	:class="{
     		'text-dark': day.month() == date.month(),
     		'text-light': day.month() != date.month(),
-    		'active': isActive(model) || 
-    			rangesFilter((dates) => isActive(dates)),
-    		'range-point': isActive(model) && isRange(model),
-    		'range-point-occupied': rangesFilter((dates) => 
-    				isActive(dates) && isRange(dates)
-    			),
+    		'active': isActive(model),
+    		'range-point': rangePoint(model),
+    		'range-point-occupied': rangesFilter((dates) => rangePoint(dates)),
     	}">
   		{{day.format('D')}}
   	</a>
@@ -62,7 +59,9 @@
 				return Array.isArray(range) && range.length == 2
 			},
 			isActive(range) {
-				return range.map((date) => date.format(this.compareFormat)).includes(this.dayFormat)
+				return range.length == 1 && 
+					range.map((date) => date.format(this.compareFormat))
+							.includes(this.dayFormat)
 			}, 
 			rangeIn(range) {
 				return this.isRange(range) && this.day.isBetween(range[0], range[1])
@@ -78,6 +77,11 @@
 			},
 			rangesFilter(method) {
 				return this.ranges.filter(method).length > 0
+			},
+			rangePoint(range) {
+				return range.length == 2 && 
+					range.map((date) => date.format(this.compareFormat))
+						.includes(this.dayFormat)
 			}
 		}
 	}
