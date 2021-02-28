@@ -11,7 +11,7 @@ Aby uruchomić formularz należy uruchomić plik index.html z folderu public prz
 
 Efekt uruchomienia powinien wyglądać następująco
 
-![alt text](https://ibb.co/7jc3HZR)
+![alt text](https://i.ibb.co/tQf0Svx/Screen-Shot-02-28-21-at-10-44-AM.png)
 
 
 ### Testy
