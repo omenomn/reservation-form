@@ -75,21 +75,23 @@
 			.calendar-btn-chevron:before {
 				content: ' ';
 				position: absolute;
-				display: inline-block;
+				display: block;
 				border-right: 4px solid $dark;
 				border-bottom: 4px solid $dark;
 				width: 10px; height: 10px;
-				top: 50%;
+				top: 35%;
 				-ms-transform: translateY(-50%);
 				transform: translateY(-50%);
 			}
 
 			.calendar-btn-chevron-left:before {
 				transform: rotate(-225deg);
+				right: 0px;
 			}
 
 			.calendar-btn-chevron-right:before {
 				transform: rotate(-45deg);
+				left: 0px;
 			}
 
 		}

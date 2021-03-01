@@ -61,19 +61,21 @@
 .calendar-wrapper .calendar .calendar-header .calendar-btn-chevron:before {
   content: " ";
   position: absolute;
-  display: inline-block;
+  display: block;
   border-right: 4px solid #464e4d;
   border-bottom: 4px solid #464e4d;
   width: 10px;
   height: 10px;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
 }
 .calendar-wrapper .calendar .calendar-header .calendar-btn-chevron-left:before {
   transform: rotate(-225deg);
+  right: 0px;
 }
 .calendar-wrapper .calendar .calendar-header .calendar-btn-chevron-right:before {
   transform: rotate(-45deg);
+  left: 0px;
 }
 .calendar-wrapper .calendar .calendar-body {
   background: #fff;
